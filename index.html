@@ -17,53 +17,17 @@
       min-height: 100vh;
       text-align: center;
     }
-
     img {
       max-width: 180px;
       margin-bottom: 20px;
       border-radius: 20px;
       box-shadow: 0 0 20px rgba(255,255,255,0.2);
     }
-
     h1 {
       font-size: 2.5em;
       margin-bottom: 30px;
       letter-spacing: 2px;
     }
-
-    .play-btn {
-      background: #ff4081;
-      border: none;
-      color: #fff;
-      padding: 15px 40px;
-      font-size: 1.2em;
-      border-radius: 50px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(255,64,129,0.4);
-    }
-
-    .play-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 20px rgba(255,64,129,0.6);
-    }
-
-    .visualizer {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      height: 120px;
-      margin: 30px 0;
-      gap: 4px;
-    }
-
-    .bar {
-      width: 8px;
-      background: linear-gradient(to top, #ff4081, #ffea00);
-      height: 10px;
-      border-radius: 4px;
-    }
-
     .socials a {
       color: #ff4081;
       text-decoration: none;
@@ -71,9 +35,29 @@
       font-weight: bold;
       transition: 0.3s;
     }
-
     .socials a:hover {
       color: #fff;
+    }
+    .visualizer {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      height: 100px;
+      margin: 30px 0;
+      gap: 4px;
+    }
+    .bar {
+      width: 8px;
+      background: linear-gradient(to top, #ff4081, #ffea00);
+      height: 10px;
+      border-radius: 4px;
+      animation: bounce 1s infinite;
+    }
+    .bar:nth-child(odd) { animation-delay: 0.2s; }
+    .bar:nth-child(even){ animation-delay: 0.4s; }
+    @keyframes bounce {
+      0%, 100% { height: 10px; }
+      50% { height: 50px; }
     }
   </style>
 </head>
@@ -81,12 +65,11 @@
   <img src="logo.png" alt="Retro Dance Radio Logo">
   <h1>Retro Dance Radio</h1>
 
-  <button class="play-btn" id="playBtn">▶ Play</button>
+  <!-- Встроенный плеер FastCast4U -->
+  <div class="cc_player" data-username="yust" data-size="sm" data-style="light">Loading ...</div>
+  <script type="text/javascript" src="https://eu4.fastcast4u.com/system/player.js"></script>
 
-  <div class="visualizer" id="visualizer">
-    <!-- 20 полосок -->
-    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+  <div class="visualizer">
     <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
     <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
   </div>
@@ -96,58 +79,5 @@
     <a href="#">Instagram</a>
     <a href="#">Telegram</a>
   </div>
-
-  <audio id="radioStream" src="https://eu4.fastcast4u.com/proxy/yust/stream" crossorigin="anonymous"></audio>
-
-  <script>
-    const playBtn = document.getElementById('playBtn');
-    const radio = document.getElementById('radioStream');
-    const visualizer = document.getElementById('visualizer');
-    const bars = visualizer.querySelectorAll('.bar');
-
-    playBtn.addEventListener('click', () => {
-      if (radio.paused) {
-        radio.play();
-        playBtn.textContent = '⏸ Pause';
-        startVisualizer();
-      } else {
-        radio.pause();
-        playBtn.textContent = '▶ Play';
-        stopVisualizer();
-      }
-    });
-
-    let audioContext, analyser, source, animationId;
-
-    function startVisualizer() {
-      if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        source = audioContext.createMediaElementSource(radio);
-        analyser = audioContext.createAnalyser();
-        source.connect(analyser);
-        analyser.connect(audioContext.destination);
-        analyser.fftSize = 128;
-      }
-
-      const bufferLength = analyser.frequencyBinCount;
-      const dataArray = new Uint8Array(bufferLength);
-
-      function animate() {
-        analyser.getByteFrequencyData(dataArray);
-        bars.forEach((bar, i) => {
-          const value = dataArray[i % bufferLength];
-          bar.style.height = Math.max(10, value / 2) + 'px';
-        });
-        animationId = requestAnimationFrame(animate);
-      }
-
-      animate();
-    }
-
-    function stopVisualizer() {
-      cancelAnimationFrame(animationId);
-      bars.forEach(bar => bar.style.height = '10px');
-    }
-  </script>
 </body>
 </html>
