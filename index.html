@@ -4,131 +4,92 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Retro Dance Radio</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #fff;
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #1a1a1a, #333);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    header {
       text-align: center;
+      margin-bottom: 30px;
     }
-
-    img.logo {
-      max-width: 180px;
-      margin-bottom: 20px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    #logo {
+      max-width: 200px;
     }
-
-    h1 {
-      font-size: 2.5em;
-      margin-bottom: 20px;
-      letter-spacing: 2px;
+    audio {
+      width: 100%;
+      margin-top: 15px;
     }
-
-    .socials a {
-      color: #ff4081;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: bold;
-      transition: 0.3s;
+    .history-section ul {
+      list-style: none;
+      padding-left: 0;
     }
-
-    .socials a:hover {
-      color: #fff;
-    }
-
-    .visualizer {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      height: 100px;
-      margin: 20px 0;
-      gap: 4px;
-    }
-    .bar {
-      width: 8px;
-      background: linear-gradient(to top, #ff4081, #ffea00);
-      height: 10px;
-      border-radius: 4px;
-      animation: bounce 1s infinite;
-    }
-    .bar:nth-child(odd) { animation-delay: 0.2s; }
-    .bar:nth-child(even){ animation-delay: 0.4s; }
-    @keyframes bounce {
-      0%, 100% { height: 10px; }
-      50% { height: 50px; }
-    }
-
-    /* Стиль блока текущего трека */
-    #trackInfo {
-      margin-top: 20px;
-      text-align: center;
-    }
-    #trackCover {
-      width: 150px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px #ff4081;
-    }
-    #trackTitle {
-      font-size: 1.2em;
-      margin-top: 10px;
-      color: #ff4081;
-      font-weight: bold;
-    }
-    #trackArtist {
-      font-size: 1em;
-      color: #fff;
+    .history-section li {
+      margin-bottom: 5px;
     }
   </style>
 </head>
 <body>
-  <img src="logo.png" alt="Retro Dance Radio Logo" class="logo">
-  <h1>Retro Dance Radio</h1>
+  <div class="container">
+    <header>
+      <img src="logo.png" alt="Retro Dance Radio Logo" id="logo">
+      <h1>Retro Dance Radio</h1>
+    </header>
 
-  <!-- Встроенный плеер FastCast4U -->
-  <div class="cc_player" data-username="yust" data-size="sm" data-style="light">Loading ...</div>
-  <script type="text/javascript" src="https://eu4.fastcast4u.com/system/player.js"></script>
+    <section class="current-track-section">
+      <h2>Слушайте сейчас:</h2>
+      <div id="current-track">Загрузка...</div>
+      <audio controls autoplay>
+        <source src="https://radio.retrodanceradio.com/listen/retro_dance_radio/radio.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио элемент.
+      </audio>
+    </section>
 
-  <!-- Блок с информацией о текущем треке -->
-  <div id="trackInfo">
-    <img id="trackCover" src="" alt="Обложка трека">
-    <div id="trackTitle"></div>
-    <div id="trackArtist"></div>
-  </div>
-
-  <!-- Декоративный визуализатор -->
-  <div class="visualizer">
-    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-    <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-  </div>
-
-  <div class="socials">
-    <a href="#">Facebook</a>
-    <a href="#">Instagram</a>
-    <a href="#">Telegram</a>
+    <section class="history-section">
+      <h2>Последние треки:</h2>
+      <ul id="history"></ul>
+    </section>
   </div>
 
   <script>
-    const player = document.querySelector(".cc_player");
+    const apiUrl = 'https://radio.retrodanceradio.com/api/nowplaying/1'; // AzuraCast API
 
-    // Обновление информации о треке каждые 3 секунды
-    setInterval(() => {
-      const title = player.getAttribute("data-current-song-title") || "";
-      const artist = player.getAttribute("data-current-song-artist") || "";
-      const cover = player.getAttribute("data-current-song-cover") || "";
+    async function updateNowPlaying() {
+      try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
 
-      document.getElementById("trackTitle").textContent = title;
-      document.getElementById("trackArtist").textContent = artist;
-      if (cover) {
-        document.getElementById("trackCover").src = cover;
+        const currentTrack = data.now_playing.song;
+        const historyTracks = data.now_playing.playlist;
+
+        // Обновляем текущий трек
+        document.getElementById('current-track').textContent = `${currentTrack.artist} - ${currentTrack.title}`;
+
+        // Обновляем историю
+        const historyList = document.getElementById('history');
+        historyList.innerHTML = '';
+        historyTracks.slice(-5).reverse().forEach(track => {
+          const li = document.createElement('li');
+          li.textContent = `${track.artist} - ${track.title}`;
+          historyList.appendChild(li);
+        });
+      } catch (err) {
+        console.error('Ошибка получения данных с API:', err);
       }
-    }, 3000);
+    }
+
+    // Обновляем каждые 15 секунд
+    updateNowPlaying();
+    setInterval(updateNowPlaying, 15000);
   </script>
 </body>
 </html>
