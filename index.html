@@ -16,10 +16,14 @@
     <section class="current-track-section">
       <h2>Слушайте сейчас:</h2>
       <div id="current-track">Загрузка...</div>
-      <audio controls autoplay>
-        <source src="https://radio.retrodanceradio.com/listen/retro_dance_radio/radio.mp3" type="audio/mpeg">
-        Ваш браузер не поддерживает аудио элемент.
-      </audio>
+      <!-- Рабочий плеер через iframe -->
+      <iframe 
+        src="https://radio.retrodanceradio.com/embed/retro_dance_radio" 
+        width="300" 
+        height="200" 
+        frameborder="0" 
+        allow="autoplay">
+      </iframe>
     </section>
 
     <section class="history-section">
