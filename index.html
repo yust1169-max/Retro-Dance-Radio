@@ -5,38 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Retro Dance Radio</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: #fff;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    #logo {
-      max-width: 200px;
-    }
-    audio {
-      width: 100%;
-      margin-top: 15px;
-    }
-    .history-section ul {
-      list-style: none;
-      padding-left: 0;
-    }
-    .history-section li {
-      margin-bottom: 5px;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
@@ -60,36 +28,6 @@
     </section>
   </div>
 
-  <script>
-    const apiUrl = 'https://radio.retrodanceradio.com/api/nowplaying/1'; // AzuraCast API
-
-    async function updateNowPlaying() {
-      try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-
-        const currentTrack = data.now_playing.song;
-        const historyTracks = data.now_playing.playlist;
-
-        // Обновляем текущий трек
-        document.getElementById('current-track').textContent = `${currentTrack.artist} - ${currentTrack.title}`;
-
-        // Обновляем историю
-        const historyList = document.getElementById('history');
-        historyList.innerHTML = '';
-        historyTracks.slice(-5).reverse().forEach(track => {
-          const li = document.createElement('li');
-          li.textContent = `${track.artist} - ${track.title}`;
-          historyList.appendChild(li);
-        });
-      } catch (err) {
-        console.error('Ошибка получения данных с API:', err);
-      }
-    }
-
-    // Обновляем каждые 15 секунд
-    updateNowPlaying();
-    setInterval(updateNowPlaying, 15000);
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
