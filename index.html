@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- BASIC SEO -->
+    <title>Retro Dance Radio — Online Radio 80s 90s 2000s | Live Stream</title>
+    <meta name="description" content="Retro Dance Radio — онлайн-радио с лучшими танцевальными хитами 80-х, 90-х и 2000-х. Слушайте live stream 24/7 в высоком качестве.">
+    <meta name="keywords" content="retro dance radio, online radio, dance hits 90s, eurodance radio, retro music stream, internet radio">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <link rel="canonical" href="https://www.retrodanceradio.com/">
+
+    <!-- LANGUAGE / GEO -->
+    <meta name="language" content="ru">
+    <meta name="geo.region" content="EU">
+    <meta name="distribution" content="global">
+
+    <!-- OPEN GRAPH -->
+    <meta property="og:type" content="music.radio_station">
+    <meta property="og:title" content="Retro Dance Radio — Live Online Radio">
+    <meta property="og:description" content="Танцевальные хиты прошлых лет. Retro Dance Radio — слушай онлайн 24/7.">
+    <meta property="og:url" content="https://www.retrodanceradio.com/">
+    <meta property="og:site_name" content="Retro Dance Radio">
+    <meta property="og:image" content="https://i.postimg.cc/28VKXjCx/logo.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:locale" content="ru_RU">
+
+    <!-- TWITTER -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Retro Dance Radio — Live Stream">
+    <meta name="twitter:description" content="Онлайн-радио с танцевальными хитами 80s, 90s, 2000s.">
+    <meta name="twitter:image" content="https://i.postimg.cc/28VKXjCx/logo.png">
+
+    <!-- RADIO -->
+    <meta name="audio" content="https://radio.retrodanceradio.com/listen/retro_dance_radio/radio.mp3">
+    <meta name="music:genre" content="Dance, Eurodance, Retro">
+
+    <!-- SCHEMA -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "RadioStation",
+      "name": "Retro Dance Radio",
+      "url": "https://www.retrodanceradio.com/",
+      "logo": "https://i.postimg.cc/28VKXjCx/logo.png",
+      "description": "Онлайн-радио с танцевальными хитами 80-х, 90-х и 2000-х годов.",
+      "inLanguage": "ru",
+      "genre": ["Dance", "Eurodance", "Retro"],
+      "audio": {
+        "@type": "AudioObject",
+        "contentUrl": "https://radio.retrodanceradio.com/listen/retro_dance_radio/radio.mp3",
+        "encodingFormat": "audio/mpeg"
+      }
+    }
+    </script>
+
+    <!-- LIBS -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #1a1a1a;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            color: white;
+            overflow-x: hidden;
+        }
+        .glass {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        const LOGO_URL = "https://i.postimg.cc/28VKXjCx/logo.png";
+        const API_URL = "https://radio.retrodanceradio.com/api/nowplaying/retro_dance_radio";
+        const STREAM_URL = "https://radio.retrodanceradio.com/listen/retro_dance_radio/radio.mp3";
+
+        function App() {
+            const audioRef = useRef(null);
+            const [playing, setPlaying] = useState(false);
+            const [song, setSong] = useState("Загрузка...");
+
+            useEffect(() => {
+                fetch(API_URL)
+                    .then(r => r.json())
+                    .then(d => setSong(d.now_playing.song.text))
+                    .catch(() => setSong("Retro Dance Radio"));
+            }, []);
+
+            const toggle = () => {
+                if (!playing) {
+                    audioRef.current.src = STREAM_URL;
+                    audioRef.current.play();
+                } else {
+                    audioRef.current.pause();
+                }
+                setPlaying(!playing);
+            };
+
+            return (
+                <div className="min-h-screen flex flex-col items-center justify-center gap-6 text-center">
+                    <img src={LOGO_URL} className="w-40 rounded-xl" alt="Retro Dance Radio Logo" />
+                    <h1 className="text-4xl font-black uppercase">Retro Dance Radio</h1>
+                    <p className="opacity-70">{song}</p>
+                    <button onClick={toggle} className="px-8 py-4 bg-red-500 rounded-full font-bold">
+                        {playing ? "STOP" : "PLAY"}
+                    </button>
+                    <audio ref={audioRef} />
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+    </script>
+</body>
+</html>
