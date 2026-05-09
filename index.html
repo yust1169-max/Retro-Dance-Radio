@@ -2,137 +2,169 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- BASIC SEO -->
-    <title>Retro Dance Radio — Online Radio 80s 90s 2000s | Live Stream</title>
-    <meta name="description" content="Retro Dance Radio — онлайн-радио с лучшими танцевальными хитами 80-х, 90-х и 2000-х. Слушайте live stream 24/7 в высоком качестве.">
-    <meta name="keywords" content="retro dance radio, online radio, dance hits 90s, eurodance radio, retro music stream, internet radio">
-    <meta name="robots" content="index, follow">
-    <meta name="googlebot" content="index, follow">
-    <link rel="canonical" href="https://www.retrodanceradio.com/">
-
-    <!-- LANGUAGE / GEO -->
-    <meta name="language" content="ru">
-    <meta name="geo.region" content="EU">
-    <meta name="distribution" content="global">
-
-    <!-- OPEN GRAPH -->
-    <meta property="og:type" content="music.radio_station">
-    <meta property="og:title" content="Retro Dance Radio — Live Online Radio">
-    <meta property="og:description" content="Танцевальные хиты прошлых лет. Retro Dance Radio — слушай онлайн 24/7.">
-    <meta property="og:url" content="https://www.retrodanceradio.com/">
-    <meta property="og:site_name" content="Retro Dance Radio">
-    <meta property="og:image" content="https://i.postimg.cc/28VKXjCx/logo.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:locale" content="ru_RU">
-
-    <!-- TWITTER -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Retro Dance Radio — Live Stream">
-    <meta name="twitter:description" content="Онлайн-радио с танцевальными хитами 80s, 90s, 2000s.">
-    <meta name="twitter:image" content="https://i.postimg.cc/28VKXjCx/logo.png">
-
-    <!-- RADIO -->
-    <meta name="audio" content="https://radio.retrodanceradio.com/listen/retro_dance_radio/radio.mp3">
-    <meta name="music:genre" content="Dance, Eurodance, Retro">
-
-    <!-- SCHEMA -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "RadioStation",
-      "name": "Retro Dance Radio",
-      "url": "https://www.retrodanceradio.com/",
-      "logo": "https://i.postimg.cc/28VKXjCx/logo.png",
-      "description": "Онлайн-радио с танцевальными хитами 80-х, 90-х и 2000-х годов.",
-      "inLanguage": "ru",
-      "genre": ["Dance", "Eurodance", "Retro"],
-      "audio": {
-        "@type": "AudioObject",
-        "contentUrl": "https://radio.retrodanceradio.com/listen/retro_dance_radio/radio.mp3",
-        "encodingFormat": "audio/mpeg"
-      }
-    }
-    </script>
-
-    <!-- LIBS -->
-    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>RetroDance</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-
-    <!-- FONTS -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
     <style>
-        body {
-            background-color: #1a1a1a;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            color: white;
-            overflow-x: hidden;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
+        body { background-color: #0d0d0d; font-family: 'Inter', sans-serif; color: white; margin: 0; display: flex; align-items: center; justify-content: center; min-height: 100vh; overflow-x: hidden; }
+        .glass-rose { background: rgba(45, 0, 10, 0.85); backdrop-filter: blur(30px); border: 1px solid rgba(255, 255, 255, 0.1); width: 100%; max-width: 420px; margin: 20px; position: relative; z-index: 10; }
+        .bg-sphere { position: fixed; width: 100vw; height: 100vw; background: radial-gradient(circle, rgba(225, 29, 72, 0.2) 0%, transparent 70%); z-index: -1; filter: blur(100px); animation: move 30s infinite alternate linear; }
+        @keyframes move { from { transform: translate(-20%, -20%); } to { transform: translate(20%, 20%); } }
+        
+        .cover-container {
+            width: 280px; height: 280px; margin: 0 auto 30px;
+            background: #1a1a1a; border-radius: 40px; overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            display: flex; align-items: center; justify-content: center;
         }
-        .glass {
-            background: rgba(255,255,255,0.05);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255,255,255,0.1);
+        #cover { width: 100%; height: 100%; object-fit: cover; transition: opacity 0.4s ease-in-out; }
+        audio { filter: invert(100%) hue-rotate(150deg) brightness(1.2); width: 100%; margin-top: 20px; height: 40px; }
+        
+        .history-item { border-bottom: 1px solid rgba(255,255,255,0.05); padding: 8px 0; }
+        .legal-info { font-size: 8px; opacity: 0.3; text-transform: uppercase; margin-top: 20px; line-height: 1.4; letter-spacing: 1px; }
+        
+        .btn-laut {
+            display: inline-block; margin-top: 15px; padding: 8px 16px;
+            border: 1px solid rgba(225, 29, 72, 0.5); border-radius: 20px;
+            font-size: 10px; font-weight: bold; color: #fb7185;
+            transition: all 0.3s ease; text-transform: uppercase; letter-spacing: 1px;
         }
     </style>
 </head>
-
 <body>
-    <div id="root"></div>
+    <div class="bg-sphere"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
+    <div class="glass-rose p-8 rounded-[48px] text-center shadow-2xl">
+        <div class="flex justify-between items-center mb-6 px-2">
+            <span class="text-[10px] font-bold text-rose-500 uppercase tracking-widest">Live</span>
+            <span id="listeners-count" class="text-[10px] opacity-60 uppercase tracking-widest">Listeners: 0</span>
+        </div>
 
-        const LOGO_URL = "https://i.postimg.cc/28VKXjCx/logo.png";
-        const API_URL = "https://radio.retrodanceradio.com/api/nowplaying/retro_dance_radio";
-        const STREAM_URL = "https://radio.retrodanceradio.com/listen/retro_dance_radio/radio.mp3";
+        <div class="cover-container">
+            <img id="cover" src="https://i.postimg.cc/28VKXjCx/logo.png" alt="Cover">
+        </div>
 
-        function App() {
-            const audioRef = useRef(null);
-            const [playing, setPlaying] = useState(false);
-            const [song, setSong] = useState("Загрузка...");
+        <div class="track-info">
+            <h1 class="text-2xl font-black italic uppercase tracking-tighter mb-4">Retro<span class="text-rose-600">Dance</span></h1>
+            <div id="artist" class="text-rose-500 font-bold uppercase tracking-[0.3em] text-[10px] mb-2 opacity-80">Retro Radio</div>
+            <div id="title" class="text-xl font-black uppercase italic tracking-tighter mb-8 leading-tight min-h-[3em] flex items-center justify-center">Загрузка...</div>
+        </div>
 
-            useEffect(() => {
-                fetch(API_URL)
-                    .then(r => r.json())
-                    .then(d => setSong(d.now_playing.song.text))
-                    .catch(() => setSong("Retro Dance Radio"));
-            }, []);
+        <div class="w-full flex justify-center mb-4">
+            <audio id="player" controls>
+                <source src="https://stream.laut.fm/retrodance" type="audio/mpeg">
+            </audio>
+        </div>
 
-            const toggle = () => {
-                if (!playing) {
-                    audioRef.current.src = STREAM_URL;
-                    audioRef.current.play();
-                } else {
-                    audioRef.current.pause();
+        <a href="https://laut.fm/retrodance" target="_blank" class="btn-laut">Listen on laut.fm</a>
+
+        <div class="text-left mt-8 mb-6">
+            <h3 class="text-[10px] font-bold uppercase tracking-[0.3em] mb-4 opacity-40">Recently Played</h3>
+            <div id="history-list" class="text-[11px] font-medium opacity-80"></div>
+        </div>
+
+        <div class="legal-info">
+            Radio-Hosting powered by laut.fm | Verantwortlich für die Inhalte: laut.ag <br>
+            Some content on this site is created with AI assistance. / Einige Inhalte dieser Website wurden mit Hilfe von KI erstellt.
+        </div>
+    </div>
+
+    <script>
+        const coverImg = document.getElementById('cover');
+        const artistEl = document.getElementById('artist');
+        const titleEl = document.getElementById('title');
+        const historyList = document.getElementById('history-list');
+        const listenersEl = document.getElementById('listeners-count');
+
+        let currentTrackId = "";
+
+        async function fetchiTunesCover(artist, title) {
+            try {
+                const term = encodeURIComponent(`${artist} ${title}`);
+                const res = await fetch(`https://itunes.apple.com/search?term=${term}&media=music&limit=1`);
+                const data = await res.json();
+                if (data.results && data.results.length > 0) {
+                    return data.results[0].artworkUrl100.replace('100x100bb.jpg', '600x600bb.jpg').replace('http://', 'https://');
                 }
-                setPlaying(!playing);
-            };
-
-            return (
-                <div className="min-h-screen flex flex-col items-center justify-center gap-6 text-center">
-                    <img src={LOGO_URL} className="w-40 rounded-xl" alt="Retro Dance Radio Logo" />
-                    <h1 className="text-4xl font-black uppercase">Retro Dance Radio</h1>
-                    <p className="opacity-70">{song}</p>
-                    <button onClick={toggle} className="px-8 py-4 bg-red-500 rounded-full font-bold">
-                        {playing ? "STOP" : "PLAY"}
-                    </button>
-                    <audio ref={audioRef} />
-                </div>
-            );
+            } catch (e) { console.error("iTunes error", e); }
+            return null;
         }
 
-        ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+        async function updateNowPlaying() {
+            try {
+                // Получаем данные о треке из Laut.fm
+                const res = await fetch('https://api.laut.fm/station/retrodance/current_song?v=' + new Date().getTime());
+                const data = await res.json();
+                
+                if (data && (currentTrackId !== data.title + data.artist?.name)) {
+                    currentTrackId = data.title + data.artist?.name;
+                    
+                    const sTitle = data.title;
+                    const sArtist = data.artist?.name;
+                    titleEl.innerText = sTitle;
+                    artistEl.innerText = sArtist;
+
+                    // Сразу ищем обложку в iTunes, минуя Laut.fm
+                    const finalImg = await fetchiTunesCover(sArtist, sTitle);
+
+                    if (finalImg) {
+                        const nextImg = new Image();
+                        const cacheBuster = finalImg.includes('?') ? '&' : '?';
+                        nextImg.src = finalImg + cacheBuster + 't=' + new Date().getTime();
+                        
+                        nextImg.onload = () => {
+                            coverImg.style.opacity = 0;
+                            setTimeout(() => {
+                                coverImg.src = nextImg.src;
+                                coverImg.style.opacity = 1;
+                            }, 400);
+                        };
+                    }
+                    
+                    if ('mediaSession' in navigator && finalImg) {
+                        navigator.mediaSession.metadata = new MediaMetadata({
+                            title: sTitle, artist: sArtist, album: 'RetroDance',
+                            artwork: [{ src: finalImg, sizes: '512x512', type: 'image/png' }]
+                        });
+                    }
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function updateHistory() {
+            try {
+                const res = await fetch('https://api.laut.fm/station/retrodance/last_songs');
+                const data = await res.json();
+                historyList.innerHTML = '';
+                data.slice(0, 5).forEach(song => {
+                    const item = document.createElement('div');
+                    item.className = 'history-item';
+                    item.innerHTML = `<span class="text-rose-500 font-bold">${song.artist.name}</span> — ${song.title}`;
+                    historyList.appendChild(item);
+                });
+            } catch (e) { console.error("History error", e); }
+        }
+
+        async function updateListeners() {
+            try {
+                const res = await fetch('https://api.laut.fm/station/retrodance/listeners');
+                const count = await res.text();
+                listenersEl.innerText = `Listeners: ${count}`;
+            } catch (e) { console.error("Listeners error", e); }
+        }
+
+        function init() {
+            updateNowPlaying();
+            updateHistory();
+            updateListeners();
+        }
+
+        init();
+        setInterval(updateNowPlaying, 10000); 
+        setInterval(updateHistory, 60000);
+        setInterval(updateListeners, 30000);
     </script>
 </body>
 </html>
